@@ -2,6 +2,9 @@
 
 #server-form {
   height: 100%;
+
+  background-color: #fff;
+
   .logo {
     background-color: @cf-yellow;
     display: inline-block;
@@ -34,6 +37,7 @@
     height: 100%;
     box-sizing: border-box;
     padding: 0 50px;
+    margin-top: -13px;
     form {
       position: relative;
       top: 50%;
@@ -47,15 +51,52 @@
         box-sizing: border-box;
         width: 80%;
       }
-      input {
-        border: 1px solid @lightgray;
-        font-size: 18px;
-        border-radius: 5px;
-        padding: 3px 7px;
-        width: 80%;
-        box-sizing: border-box;
-        color: @lightblack;
+
+
+      .input-field {
+        position: relative;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+
+        input {
+          background-color: transparent;
+          border: none;
+          border-bottom: 1px solid #9e9e9e;
+          border-radius: 0;
+          outline: none;
+          height: 3rem;
+          width: 100%;
+          font-size: 1rem;
+          margin: 0 0 8px 0;
+          padding: 0;
+          box-shadow: none;
+          box-sizing: content-box;
+          transition: all .3s;
+        }
+
+        input:focus {
+          border-bottom: 1px solid #800;
+          box-shadow: 0 1px 0 0 #800;
+        }
+
+        label.active {
+          font-size: 0.8rem;
+          -webkit-transform: translateY(-140%);
+          transform: translateY(-140%);
+        }
+
+        label {
+          color: #9e9e9e;
+          position: absolute;
+          top: 0.8rem;
+          left: 0;
+          font-size: 1rem;
+          cursor: text;
+          transition: .2s ease-out;
+        }
       }
+
+
       button {
         background-color: @white;
         border: 1px solid @cf-green;

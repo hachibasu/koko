@@ -18,6 +18,7 @@ interface ServerFormProps {
 
 class ServerForm extends ReactComponent<ServerFormProps, {}> {
   private server: IServerInterface;
+  private inputSetters: IDict<(text: string) => any> = {};
 
   constructor() {
     super();
@@ -35,9 +36,12 @@ class ServerForm extends ReactComponent<ServerFormProps, {}> {
 
   applyValues() {
     let fields = ['host', 'port', 'encoding', 'nick', 'username', 'password', 'realname'];
+    let activeEle = document.activeElement;
     fields.forEach(fieldName => {
-      React.findDOMNode<HTMLInputElement>(this.refs[fieldName]).value = this.val(fieldName);
+      this.inputSetters[fieldName](this.val(fieldName));
     });
+    if(activeEle['focus'])
+      activeEle['focus']();
   }
 
   componentDidMount() {
@@ -82,10 +86,30 @@ class ServerForm extends ReactComponent<ServerFormProps, {}> {
   }
 
   field(label: string, inputName: string, inputType: string = 'text'): React.ReactElement<any> {
+    let inputElement: HTMLInputElement;
+    let labelElement: HTMLLabelElement;
+
+    let updateEle = () => {
+      if(inputElement)
+        this.inputSetters[inputName] = (text: string) => {
+          inputElement.value = text;
+          updateEle();
+        };
+
+      if(!inputElement || !labelElement)
+        return;
+
+      if(inputElement.value.length > 0 || inputElement === document.activeElement) {
+        labelElement.classList.add("active");
+      } else {
+        labelElement.classList.remove("active");
+      }
+    };
+
     return (
-      <div>
-        <div className='field-name'>{label}</div>
-        <input type={inputType} name={inputName} ref={inputName} />
+      <div className="input-field">
+        <label htmlFor={inputName} ref={(ele) => {labelElement = (ele.getDOMNode() as HTMLLabelElement); updateEle(); }} onClick={() =>inputElement.focus()} >{label}</label>
+        <input type={inputType} name={inputName} ref={(ele) => { inputElement = (ele.getDOMNode() as HTMLInputElement); updateEle(); }} onFocus={updateEle} onBlur={updateEle} onInput={updateEle} />
       </div>
     );
   }
